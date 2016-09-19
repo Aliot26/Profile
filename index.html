@@ -1,99 +1,140 @@
 <!DOCTYPE html>
-<html ng-app="studyModule">
+<html ng-app="app">
 
 	<head>
 		<meta charset="utf-8"/>
 		<title>AngularJS - Moje CV</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-		<link href="http://fonts.googleapis.com/css?family=Open+Sans:400,700" rel="stylesheet" />
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">		
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script> 
-		<link href="style.css" rel="stylesheet" />
+		<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/angular_material/0.7.0/angular-material.min.css">	
 
-		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
+		<link href="style.css" rel="stylesheet" />
+		<script src="hammer.js"></script>
+		<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.3.6/angular.min.js"></script>
+		<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.3.6/angular-animate.min.js"></script>
+		<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.3.6/angular-aria.min.js"></script>
+		<script src="http://ajax.googleapis.com/ajax/libs/angular_material/0.7.0/angular-material.min.js"></script>
 		<script src="app.js"></script>
+		
 		<!--[if lt IE 9]>
 		<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 		<![endif]-->
 	</head>	
 
-	<body>		
-		<div class="container">
-			<div class="row">
-				<div class="col-md-10 col-md-offset-1">
-					<div class="rov">
-					<nav role="navigation" class="navbar navbar-default">
-					<div class="navbar-header">
-						<button type="button" data-target="#navbarCollapse" data-toggle="collapse" class="navbar-toggle">
-							<span class="sr-only">Toggle navigation</span>
-							<span class="icon-bar"></span>
-							<span class="icon-bar"></span>
-							<span class="icon-bar"></span>
-						</button>
+	<body>
+		<div ng-controller="AppCtrl" ng-cloak>	
+		
+		   <md-tabs md-selected="data.selectedIndex">	
+				<md-tab id="tab1" aria-controls="tab1-content">
+					Personalia
+				</md-tab>
+				<md-tab id="tab2" aria-controls="tab2-content">
+					Doświadczenie
+				</md-tab>
+				<md-tab id="tab3" aria-controls="tab3-content">
+					Umiejętności
+				</md-tab>
+				<md-tab id="tab4" aria-controls="tab4-content">
+					Języki
+				</md-tab>
+				<md-tab id="tab5" aria-controls="tab5-content">
+					Zainteresowania
+				</md-tab>
+			</md-tabs>
+			
+    <ng-switch on="data.selectedIndex" class="tabpanel-container">
+        <div role="tabpanel" id="tab1-content" aria-labelledby="tab1" ng-switch-when="0">
+            <md-whiteframe class="md-whiteframe-z1" >
+                <md-content class="md-padding">
+                    <div layout="row" layout-xs="column">					
+					<div flex>
+					<form name="userForm">
+                        <div layout="column">
+                            <md-input-container flex>
+                                <label>Imie:</label>
+                                <input ng-model="user.firstName" md-maxlength="20" placeholder="">
+                            </md-input-container>
+                            <md-input-container flex>
+                                <label>Nazwisko:</label>
+                                <input ng-model="user.lastName" md-maxlength="20" placeholder="">
+                            </md-input-container>                        
+							<md-input-container flex>
+								<label>Kraj:</label>
+								<input ng-model="user.country" md-maxlength="15" placeholder="">
+							</md-input-container>                        
+                            <md-input-container flex>
+                                <label>Miasto:</label>
+                                <input ng-model="user.city" md-maxlength="20" placeholder="">
+                            </md-input-container> 
+							<md-button class="md-raised md-primary" ng-click="save()">Zachować</md-button>
+                        </div>
+                    </form>
 					</div>
-					<div id="navbarCollapse" class="collapse navbar-collapse" ng-controller="studyCtrl">
-						<ul class="nav navbar-nav">
-							<li ng-repeat="task in tasks"><a href='#' ng-click='{{task.complete}}'>{{task.action}}</a></li>							
-						</ul>
+					<div flex>
+					<md-list>
+                        <md-item ng-repeat="item in users">
+                            <md-item-content>
+                                <div class="md-tile-content">
+                                    <h3>Imie:{{item.firstName}}</h3>
+                                    <h3>Nazwisko:{{item.lastName}}</h3>
+                                    <h4>Kraj: {{item.country}}</h4>
+                                    <p>
+                                       Miasto: {{item.city}}
+                                    </p>
+                                </div>
+                                <md-button class="md-raised md-warn" ng-click="delete($index, $event)">Usunąć</md-button>
+                            </md-item-content>
+                        </md-item>
+                    </md-list>
 					</div>
-					</nav>
 					</div>
-				</div>
-			</div>
-			<section>
-			<div class="row">				
-				<div class="col-md-10 col-md-offset-1">
-				<div class="unit">
-					<div>
-					<p>It's something about me</p>					
-					</div>
-				</div>				
-				</div>				
-				<div class="ng-cloak">
-				<div ng-show='data==="about"' class="col-md-10 col-md-offset-1">
-					<div class="unit">
-					<p>Name: Olga</p>
-					<p>Nazwisko: Kohanova</p>
-					<p>Data urodzenia: 26.08.1976</p>					
-					</div>
-				</div>	
-				
-				<div ng-show='data==="experience"' class="col-md-10 col-md-offset-1">
+                </md-content>
+            </md-whiteframe>
+        </div>
+        <div role="tabpanel" id="tab2-content" aria-labelledby="tab2" ng-switch-when="1">
+            <md-whiteframe class="md-whiteframe-z1" layout layout-align="center center">
+                <md-content>
 					<div class="unit"> 
 					<p>data: miejsce pracy</p>
 					<p>data: miejsce pracy</p>
 					<p>data: miejsce pracy</p>							
-					</div>								
-				</div>
-				
-				<div ng-show='data==="skills"' class="col-md-10 col-md-offset-1">
+					</div>	                    
+                </md-content>
+            </md-whiteframe>
+        </div>
+		<div role="tabpanel" id="tab3-content" aria-labelledby="tab3" ng-switch-when="2">
+            <md-whiteframe class="md-whiteframe-z1" layout layout-align="center center">
+                <md-content>
 					<div class="unit">
 					<p>HTML</p>
 					<p>CSS</p>
 					<p>PHP</p>						
-					</div>
-				</div>
-				
-				<div ng-show='data==="languages"' class=" col-md-10 col-md-offset-1">
+					</div>	                    
+                </md-content>
+            </md-whiteframe>
+        </div>
+		<div role="tabpanel" id="tab4-content" aria-labelledby="tab4" ng-switch-when="3">
+            <md-whiteframe class="md-whiteframe-z1" layout layout-align="center center">
+                <md-content>
 					<div class="unit">
 					<p>rosyjski</p>
 					<p>polski</p>
 					<p>angielski</p>						
-					</div>
-				</div>
-				
-				<div ng-show='data==="hobbies"' class="col-md-10 col-md-offset-1">
+					</div>	                    
+                </md-content>
+            </md-whiteframe>
+        </div>
+		<div role="tabpanel" id="tab5-content" aria-labelledby="tab5" ng-switch-when="4">
+            <md-whiteframe class="md-whiteframe-z1" layout layout-align="center center">
+                <md-content>
 					<div class="unit">
 					<p>muzyka</p>
 					<p>sport</p>
 					<p>czytanie</p>						
-					</div>
-				</div>
-				</div>
-			</div>
-			</section>
-			
+					</div>	                    
+                </md-content>
+            </md-whiteframe>
+        </div>
+    </ng-switch>		
 		</div>
 
 		
