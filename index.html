@@ -8,7 +8,7 @@
 		<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/angular_material/0.7.0/angular-material.min.css">	
 
 		<link href="style.css" rel="stylesheet" />
-		<script src="hammer.js"></script>
+		<script src="lib/hammer.js"></script>
 		<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.3.6/angular.min.js"></script>
 		<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.3.6/angular-animate.min.js"></script>
 		<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.3.6/angular-aria.min.js"></script>
@@ -21,7 +21,7 @@
 	</head>	
 
 	<body>
-		<div ng-controller="AppCtrl" ng-cloak>	
+		<div ng-cloak>	
 		
 		   <md-tabs md-selected="data.selectedIndex">	
 				<md-tab id="tab1" aria-controls="tab1-content">
@@ -45,34 +45,39 @@
         <div role="tabpanel" id="tab1-content" aria-labelledby="tab1" ng-switch-when="0">
             <md-whiteframe class="md-whiteframe-z1" >
                 <md-content class="md-padding">
-                    <div layout="row" layout-xs="column">					
+                    <div layout="row" layout-xs="column" ng-controller="AppCtrl">					
 					<div flex>
-					<form name="userForm">
+					<form name="userForm" novalidate >
                         <div layout="column">
                             <md-input-container flex>
                                 <label>Imie:</label>
-                                <input ng-model="user.firstName" md-maxlength="20" placeholder="">
+                                <input ng-model="newUser.firstName" md-maxlength="20" required placeholder="">
                             </md-input-container>
                             <md-input-container flex>
                                 <label>Nazwisko:</label>
-                                <input ng-model="user.lastName" md-maxlength="20" placeholder="">
+                                <input ng-model="newUser.lastName" md-maxlength="20" required placeholder="">
                             </md-input-container>                        
 							<md-input-container flex>
 								<label>Kraj:</label>
-								<input ng-model="user.country" md-maxlength="15" placeholder="">
+								<input ng-model="newUser.country" md-maxlength="15" required placeholder="">
 							</md-input-container>                        
                             <md-input-container flex>
                                 <label>Miasto:</label>
-                                <input ng-model="user.city" md-maxlength="20" placeholder="">
+                                <input ng-model="newUser.city" md-maxlength="15" required placeholder="">
                             </md-input-container> 
-							<md-button class="md-raised md-primary" ng-click="save()">Zachować</md-button>
+							<md-button class="md-raised md-primary" ng-click="saveData(newUser)" ng-disabled="userForm.$invalid">Zachować</md-button>
                         </div>
                     </form>
 					</div>
 					<div flex>
 					<md-list>
-                        <md-item ng-repeat="item in users">
-                            <md-item-content>
+					<div>
+						Liczba użytkowników
+						<span class="label label-info">{{users.length}}</span>
+						<p>Limit: <select class="text-info" ng-model="limitValue" ng-options="item for item in limitRange"></select></p>
+					</div>
+                        <md-item ng-repeat="item in users | limitTo:limitValue">
+                            <md-item-content>							
                                 <div class="md-tile-content">
                                     <h3>Imie:{{item.firstName}}</h3>
                                     <h3>Nazwisko:{{item.lastName}}</h3>
@@ -93,7 +98,7 @@
         <div role="tabpanel" id="tab2-content" aria-labelledby="tab2" ng-switch-when="1">
             <md-whiteframe class="md-whiteframe-z1" layout layout-align="center center">
                 <md-content>
-					<div class="unit"> 
+					<div> 
 					<p>data: miejsce pracy</p>
 					<p>data: miejsce pracy</p>
 					<p>data: miejsce pracy</p>							
@@ -104,18 +109,37 @@
 		<div role="tabpanel" id="tab3-content" aria-labelledby="tab3" ng-switch-when="2">
             <md-whiteframe class="md-whiteframe-z1" layout layout-align="center center">
                 <md-content>
-					<div class="unit">
-					<p>HTML</p>
-					<p>CSS</p>
-					<p>PHP</p>						
-					</div>	                    
+					<div ng-controller="CheckCtrl" class="md-padding" ng-cloak style="margin-top: 30px;">
+					  <div layout="row" layout-wrap>
+						<div flex>
+						  <div>  
+							<fieldset class="standard" >
+							  <legend>Wybierz swoje umiejętności</legend>
+							  <div layout="row" layout-wrap flex>
+								<div flex="50" ng-repeat="item in items">
+								  <md-checkbox ng-checked="exists(item, selected)" ng-click="toggle(item, selected)">
+									{{ item }} <span ng-if="exists(item, selected)">selected</span>
+								  </md-checkbox>
+								</div>
+							  </div>
+							</fieldset>
+						  </div>
+						</div>
+						<div flex>
+						  <div >
+							<h2 class="md-title">wybranych umiejętności</h2>
+							<code style="display: block; padding: 8px;">{{selected | json}}</code>
+						  </div>
+						</div>
+					  </div>
+					</div>                  
                 </md-content>
             </md-whiteframe>
         </div>
 		<div role="tabpanel" id="tab4-content" aria-labelledby="tab4" ng-switch-when="3">
             <md-whiteframe class="md-whiteframe-z1" layout layout-align="center center">
                 <md-content>
-					<div class="unit">
+					<div>
 					<p>rosyjski</p>
 					<p>polski</p>
 					<p>angielski</p>						
@@ -126,7 +150,7 @@
 		<div role="tabpanel" id="tab5-content" aria-labelledby="tab5" ng-switch-when="4">
             <md-whiteframe class="md-whiteframe-z1" layout layout-align="center center">
                 <md-content>
-					<div class="unit">
+					<div>
 					<p>muzyka</p>
 					<p>sport</p>
 					<p>czytanie</p>						
