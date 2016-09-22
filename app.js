@@ -108,37 +108,4 @@
 		$scope.rating3 = 2;
 });
 
-
- /*   app.directive('mySlider', function() {
-	   return {		 
-		 link: function(scope, element, attrs) {
-			var sliderFunc = function(aria-valuenow) {
-			
-				if (aria-valuenow == "4") {
-					console.log('click');
-				}
-										switch(parent.scope.rating3){
-						case '1':
-							console.log('1');
-							break;
-						case '2':
-							console.log('2');
-							break;
-						case '3':
-							console.log('3');
-							break;
-						case '4':
-							console.log('4');
-							break;
-						case '5':
-							console.log('5');
-							break;
-					}	
-				
-			 }
-			 
-			 
-		}
-	  };
-	})*/
 })(); 
